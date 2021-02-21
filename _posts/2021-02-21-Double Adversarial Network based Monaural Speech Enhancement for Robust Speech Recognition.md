@@ -3,7 +3,6 @@ title: Double Adversarial Network based Monaural Speech Enhancement for Robust S
 categories: [paper]
 comments: true
 ---
-## Double Adversarial Network based Monaural Speech Enhancement for Robust Speech Recognition
 본 논문에서 제안하는 모델의 구조는 아래의 그림과 같다.
 
 ![image](https://user-images.githubusercontent.com/33983084/108619929-954b6100-746b-11eb-8e67-9198449b4ac3.png) 
