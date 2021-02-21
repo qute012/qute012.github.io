@@ -1,5 +1,5 @@
 
-title: Jin Technical blog #Your awesome title
+title: 덕진스 기술 블로그 #Your awesome title
 email: #youremail@domain.com
 description: > # this means to ignore newlines until "baseurl"
   Write an awesome description for your new site here. You can edit this
@@ -18,7 +18,7 @@ google_analytics: #UA—XXXXXXXX-X
 disqus_shortname: #disqus shortname
 
 user:
-  name: 덕진스 기술 블로그
+  name: DeokJin
   pic: /assets/img/cat.jpg
   picAlt: "catbook"
   job: about AI
