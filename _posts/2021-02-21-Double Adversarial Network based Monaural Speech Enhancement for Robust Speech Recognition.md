@@ -1,5 +1,5 @@
 ---
-title: Double Adversarial Network based Monaural Speech Enhancement for Robust Speech Recognition
+title: Double Adversarial Network based Monaural Speech Enhancement for Robust Speech Recognition (ISCA 2020)
 categories: [paper]
 comments: true
 ---
