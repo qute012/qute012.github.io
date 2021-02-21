@@ -1,5 +1,5 @@
 ---
-title: Double Adversarial Network based Monaural Speech Enhancement for Robust Speech Recognition  (ISCA 2020)
+title: Self-Distillation for Improving CTC-Transformer-based ASR Systems (ISCA 2020)
 categories: [paper]
 comments: true
 ---
