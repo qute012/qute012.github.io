@@ -1,4 +1,8 @@
-## Deep Neural Network-Based Generalized Sidelobe Canceller for Robust Multi-channel Speech Recognition
+---
+title: Double Adversarial Network based Monaural Speech Enhancement for Robust Speech Recognition
+categories: [paper]
+comments: true
+---
 ISCA 2021 제출 목표를 위한 실험 설계로 본 논문에서는 데이터 셋 구축만 살펴보았음.
 
 RIR과 노이즈 합성을 사용하여 90시간의 반향과 노이즈가 담긴 데이터를 생성함. RIR은 특정 환경의 impulse와 음성을 convolving함.
