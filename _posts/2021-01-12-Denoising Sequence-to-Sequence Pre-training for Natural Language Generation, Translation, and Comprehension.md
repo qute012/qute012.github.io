@@ -1,5 +1,5 @@
 ---
-title: BART: Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and Comprehension
+title: BART Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and Comprehension
 categories: [paper]
 comments: true
 ---
