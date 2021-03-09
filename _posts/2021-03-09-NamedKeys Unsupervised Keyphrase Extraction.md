@@ -24,13 +24,13 @@ comments: true
 
 문서 D의 representation은 아래의 수식으로 근사한다.
 
-![image-20210309174943993](C:\Users\qute0\AppData\Roaming\Typora\typora-user-images\image-20210309174943993.png)
+![image](https://user-images.githubusercontent.com/33983084/110456385-da7abe80-810c-11eb-85b7-32cdd638dbf1.png)
 
 해당 토큰(여기서는 keyphrase)이 전체 문서에서 등장한 확률의 역에 log를 취한 IDF를 구하고, wi는 named entity 에 상응하는 벡터이다. 
 
 최종적으로 문서(D)와 각 keyphrase representation의 코사인 유사도(cosine similarity)를 구함.
 
-![image-20210309175913173](C:\Users\qute0\AppData\Roaming\Typora\typora-user-images\image-20210309175913173.png)
+![image](https://user-images.githubusercontent.com/33983084/110456439-e9617100-810c-11eb-9be5-fa6b0dea6d66.png)
 
 **Phrase Quality**
 
@@ -38,11 +38,11 @@ comments: true
 
 본 논문에서 keyphrase 후보군들의 품질을 올리기 위해 새로운 랭킹 알고리즘인 Information Frequency를 제안한다. 점별 상호정보량(pointwise mutual information)이란 개념을 적용하였다.
 
-![image-20210309182418953](C:\Users\qute0\AppData\Roaming\Typora\typora-user-images\image-20210309182418953.png)
+![image](https://user-images.githubusercontent.com/33983084/110456497-fda56e00-810c-11eb-88e4-116f1da8c5b6.png)
 
 pmi의 수식으로 부터, x,y 단어의 빈도수를 곱해주면서 x,y가 동시에 일어나면서 이 문서에서 얼만큼 자주 등장하는지에 대한 정보량을 계산한다.
 
-![image-20210309180518129](C:\Users\qute0\AppData\Roaming\Typora\typora-user-images\image-20210309180518129.png)
+![image](https://user-images.githubusercontent.com/33983084/110456527-05fda900-810d-11eb-8dcd-006c5cd190d2.png)
 
 각 파라미터들을 정리해보면,
 
@@ -56,13 +56,13 @@ freq(x,y): 두개의 단어 등장하는 횟수
 
 이러한 방법은 pmi가 항상 각 단어의 발생 확률에 상대적인 동시 발생 확률을 계산하는데, 각 단어의 빈도수가 많아질수록 pmi 점수는 작아진다. 여기서는 구 빈도와 구성 단어의 빈도를 기반으로 pmi 수식을 개선하여 단어의 표현성을 측정한다. 해당 단어가 텍스트에서 첫번째, 두번째에 존재하지 않을 수록,  두 단어가 함께 존재할 수록 더 많은 정보량을 가지며, 두 단어의 빈도수를 곱해서 정보량을 계산한다.
 
-![image-20210309182156990](C:\Users\qute0\AppData\Roaming\Typora\typora-user-images\image-20210309182156990.png)
+![image](https://user-images.githubusercontent.com/33983084/110456562-0eee7a80-810d-11eb-9ef2-3ee748161359.png)
 
 위의 예시에서 베이스라인에서 high risk prostate cancer은 높은 정보량을 가지는 것으로 되어있는데, 이 어구자체가 문서와의 유사도가 높다고 판별된다. 하지만 high/risk/prostate/cancer 각각의 단어를 보면 prostate와 cancer은 본문에서 함께 표현될 가능성이 높다. 하지만 high와 risk는 prostate와 cancer과 함께 표현될 확률이 낮다. 그렇기에 개선된 방법에서는prostate cancer만을 핵심어구로 보게된다. 
 
 여기서는 랭킹알고리즘(페이지 랭킹에 기반한 수식 같음)을 사용한다.
 
-![image-20210309190632322](C:\Users\qute0\AppData\Roaming\Typora\typora-user-images\image-20210309190632322.png)
+![image](https://user-images.githubusercontent.com/33983084/110456597-1a41a600-810d-11eb-8e1c-c476ec1babc3.png)
 
 임의의 알파값을 설정하여, 이 알파값보다 높은 랭킹 점수를 가진 어구를 핵심어구라 한다. 본 논문에서는 0.75로 사용하였음. 이 부분은 깊게 보지 않았음.
 
@@ -72,7 +72,7 @@ freq(x,y): 두개의 단어 등장하는 횟수
 
 본 논문에서는 PubMed Central Open Access Subset articles에서 저자가 사용한 최소 5개 이상의 키워드를 핵심어구로 사용하였으며, 데이터 셋이 제공되는 내용은 아래와 같음. 2700만개의 기사중에 3049개만이 기사 제목 서론 5개 이상의 핵심어구를 가지고 있음. 데이터 셋을 다운하는 곳은 https://github.com/ZelalemGero/NamedKeys 여기서 다운할 수 있음.
 
-![image-20210309191412034](C:\Users\qute0\AppData\Roaming\Typora\typora-user-images\image-20210309191412034.png)
+![image](https://user-images.githubusercontent.com/33983084/110456641-27f72b80-810d-11eb-9b40-2b20becb90e9.png)
 
 감쇠 계수가 뭔지 모르지만 0.85로 사용했다고 함...  측정 방법은 F1 score를 사용하였음.
 
@@ -82,4 +82,4 @@ freq(x,y): 두개의 단어 등장하는 횟수
 
 결과는 아래 표와 같음.
 
-![image-20210309191620680](C:\Users\qute0\AppData\Roaming\Typora\typora-user-images\image-20210309191620680.png)
+![image](https://user-images.githubusercontent.com/33983084/110456718-3d6c5580-810d-11eb-9e9f-ba0134172267.png)
