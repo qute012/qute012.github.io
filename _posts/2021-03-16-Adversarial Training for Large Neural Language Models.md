@@ -1,43 +1,64 @@
 ---
-title: Semantic Mask for Transformer based End-to-End Speech Recognition (ISCA 2020)
+title: Adversarial Training for Large Neural Language Models
 categories: [paper]
 comments: true
 ---
-ㅇTransformer 모델을 위한 Semantic Mask
-
-**Abstract**
-
-Transformer 인코더-디코더 모델은 ASR과 TTS에서 좋은 결과를 냄.
-
-입력 시퀀스 - 출력 시퀀스의 맵핑을 사전 forced alignment없이 학습함. 학습 데이터가 적으면 과적합될 수 있어 SpecAugment를 사용하는데, 본 논문에서는 일반화된 의미론적 마스키 방법을 제안한다.
+microsoft research에서 발표한 논문, 간단하게 Adversarial Training을 LM에 어떻게 적용하는지 방법론을 살펴볼 예정.
 
 
 
-**Semantic Masking**
+**Preliminary**
 
-1. **Masking Strategy**
-   본 기법을 쓰기 위해서는 강제 정렬을 필요로함. 여기서는 Montreal forced aligner를 사용함, 단어 레벨에서 시간 정보를 포함한. 이 정보로 부터 임의의 토큰을 masking하는데, 기존 SpecAugment에서는 실제 발화가 아니여도 masking 할 수 있는데, 본 논문에서는 실제 발화만을 마스킹하도록 함, 15%의 샘플을 전체 발화의 평균값으로 마스킹함 => 이 부분은 곧 SpecAugment의 주요 마스킹 기법을 적용할 수 있음.
-2. **Why Semantic Mask Works?**
-   SpecAugment는 과적합을 방지하기 위해 입력을 손상시켜 음향 모델의 과적합을 방지하는데, 반면에 본 모델은 디코더가 언어 모델을 더 잘 배울수 있도록 함. 이것은 곧 E2E(End-to-End) 모델에서 디코더가 마스킹 되지않은 signal에서 마스킹된 단어를 예측하는데 기반되게 함. 기존 방식에서 가장 큰 개선점인 듯 하다. 디코더가 alignment를 하고 단어를 예측할 때, masking된 부분 역시 하나의 캐릭터로 예측될 수 있는데, 실제 그 부분은 발화를 하지 않는 부분일 확률이 있다. 이는 곧 연관이있는 음성만을 참고하여서 단어를 생성하도록 돕는다. 이는 노이즈가 있을 때 더 효과적이라고 함.
-
-
-
-**Performance** 
-
-테이블 중간을 보면 SpecAugment와 비교가 있는데, other dataset을 보면 성능 향상이 엄청나다.
-
-![image](https://user-images.githubusercontent.com/33983084/110899573-af7aaf80-8344-11eb-9a93-d28aa14d71a0.png)
-
-또 다른 실험으로는 LM과 함께 쓸 때를 ablation test 하였는데, LM과의 결합에서는 특히 더 좋은 성능향상을 보여준다.
-
-![image](https://user-images.githubusercontent.com/33983084/110899732-fa94c280-8344-11eb-9b41-7affca23a443.png)
-
-영어권 음성인식은 이미 높은 성능을 도달하였고, 개선된 기법들의 성능향상이 크게 일어나는 것 같지 않아보이지만, 한국어에서는 LAS에서 Transformer 그리고 더 개선된 모델이 나올수록 엄청난 성능향상을 보여준다. WER 성능 차이가 엄청남. . . .
+1. Input Representation
+   입력이 [SEP] 토큰으로 나누어진 텍스트 스팬으로 구성되어 있다고 가정함. BPE를 사용하여 subword로 나누어서 어휘 부족 문제를 해결.
+2. Model Architecture
+   Transformer 계열을 사용함.
+3. Self Supervision
+   [MASK] 토큰을 사용하는 MLM은 BERT에서 핵심적인 혁신 내용임. 그 외 BERT와 RoBERTa의 학습과정에서 Masking 규칙에 대해서 설명함.
 
 
 
-**Disscution (내생각)**
+**ALUM (Adversarial training for large neural LangUage Models)**
 
-본 실험에서는 몬트리울 aligner를 사용하였는데, 이 역시 Transformer가 학습되면서 함께 학습되도록 개선할 수 없을까...? 그렇게되면 Transformer의 Alignment 역시 더 올바른 학습이 가능할 것으로 보일듯...
+1. Standard Traning Objectives
+   pre-training과 fine-tuning은 모두 학습 데이터에서 표준 오차를 최소화하는 것으로 볼 수 있음. 자기 지도학습 또는 지도 학습으로 부터 기반한.
+   특히 학습 알고리즘은 f(x,θ): x->C,  θ로 파라미터화 된 함수 f를 학습하려고 한다. C는 task에 대해 특정한 라벨 세트이다.
 
-아마도 이러한 masking 기법에서의 성능향상도 있으면서 준지도학습의 alignment 학습의 효과도 있어보임.
+**discussion**
+만약 일상의 용어를 학습한 BERT를 Generalized 되었다고 가정하면, SciBert, BioBert 등의 모델들은 Specific domain에 적격한 모델이라고 볼 수 있다. 서로는 서로의 task를 잘 해결할 수 없음.
+
+이것은 등장하는 용어의 분산 차이라고 볼 수 있는데, 사실 specific domain terms를 제외한 general terms들은 중복되는 것이 많다.
+
+
+
+**key idea**
+
+만약 Specific Domain BERT를 S(x)라고 가정하고, General BERT를 G(x')라고 가정할 때, x는 두 BERT의 토크나이저 차이로 각각 다른 입력이 들어가게 된다.
+
+S(x)는 해당 도메인에 관련된 토큰일수록 많은 정보량을 가지게되고, G(x')는 General한 도메인에서 어디에 속해있지 않은 토큰이 많은 정보량을 가진다고 추정할 수 있다.
+
+정확히 S(x)에서 각 토큰의 은닉층과 G(x')에서 각 토큰의 은닉층은 서로 다른 토큰을 가리킨다(확률적으로 같을 수도 있기는 하나 굉장히 낮은 확률일듯), 그러나 문서 레벨에서 각 은닉층을 살펴보면 정보량이 변화하는 분포를 볼 수 있다.
+
+두 LM에서 Attention Distribution의 합은 전체 문서에 대한 distribution으로 추정할 수 있다. 
+
+D_distribution ~~ Attention Distribution(S(x)) + Attention Distribution(G(x'))
+
+
+
+그러나 여기서 문제점은 다른 토크나이저로 부터 생성된 시퀀스의 길이가 다르다는 것이다. 그렇기 때문에 서로 같은 t 스텝에서 각 Distribution이 보고있는 토큰은 다르게 된다.
+
+|(S(x))| ~= |(G(x'))|
+
+
+
+이러한 문제를 해결하기 위해, 만약 |S(x)| = k, |G(x')| = k' 라고 가정하면, k' 길이의 시퀀스에 k개의 시퀀스를 alignment 시키면 어떨까, 컨텍스트 벡터를 다음과 같이 계산하고, C' = (W(S(x))+b)* (W'(G(x'))+b')^T
+
+
+$$
+D'_i = \frac{exp(C'_i)}{\sum _{j=1}^nexp(C'_j)}
+$$
+이렇게 되면, 우리는 G(x)에 대해서 S(x)가 어디에서 매핑될 수 있는지 계산할 수 있고, 새로운 distribution을 얻을 수 있다.
+
+그리고 새로운 출력을 아래와 같이 정의할 수 있다.
+
+S'(x) = dot(S(x), D')
