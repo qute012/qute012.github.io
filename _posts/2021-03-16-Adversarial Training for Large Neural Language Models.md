@@ -31,7 +31,7 @@ microsoft research에서 발표한 논문, 간단하게 Adversarial Training을 
 
 
 
-**key idea**
+**key idea(내 아이디어...)**
 
 만약 Specific Domain BERT를 S(x)라고 가정하고, General BERT를 G(x')라고 가정할 때, x는 두 BERT의 토크나이저 차이로 각각 다른 입력이 들어가게 된다.
 
@@ -41,17 +41,21 @@ S(x)는 해당 도메인에 관련된 토큰일수록 많은 정보량을 가지
 
 두 LM에서 Attention Distribution의 합은 전체 문서에 대한 distribution으로 추정할 수 있다. 
 
-D_distribution ~~ Attention Distribution(S(x)) + Attention Distribution(G(x'))
-
-
+![image](https://user-images.githubusercontent.com/33983084/111295965-4fab3e00-868f-11eb-8a31-fc00990c3829.png)
 
 그러나 여기서 문제점은 다른 토크나이저로 부터 생성된 시퀀스의 길이가 다르다는 것이다. 그렇기 때문에 서로 같은 t 스텝에서 각 Distribution이 보고있는 토큰은 다르게 된다.
 
-|(S(x))| ~= |(G(x'))|
+![image](https://user-images.githubusercontent.com/33983084/111295693-04912b00-868f-11eb-9872-625d6474a946.png)
 
+이러한 문제를 해결하기 위해, 만약 
 
+![image](https://user-images.githubusercontent.com/33983084/111295245-816fd500-868e-11eb-89b2-a384d048da2f.png)
 
-이러한 문제를 해결하기 위해, 만약 |S(x)| = k, |G(x')| = k' 라고 가정하면, k' 길이의 시퀀스에 k개의 시퀀스를 alignment 시키면 어떨까, 컨텍스트 벡터를 다음과 같이 계산하고, C' = (W(S(x))+b)* (W'(G(x'))+b')^T
+라고 가정하면, 
+
+k' 길이의 시퀀스에 k개의 시퀀스를 alignment 시키면 어떨까, 컨텍스트 벡터를 다음과 같이 계산하고, 
+
+![image](https://user-images.githubusercontent.com/33983084/111295145-6735f700-868e-11eb-8a67-8696fa41616e.png)
 
 ![image](https://user-images.githubusercontent.com/33983084/111294835-132b1280-868e-11eb-8021-968864c1fbc5.png)
 
@@ -59,4 +63,4 @@ D_distribution ~~ Attention Distribution(S(x)) + Attention Distribution(G(x'))
 
 그리고 새로운 출력을 아래와 같이 정의할 수 있다.
 
-S'(x) = dot(S(x), D')
+![image](https://user-images.githubusercontent.com/33983084/111295288-8c2a6a00-868e-11eb-98da-ff2195e14d6f.png)
