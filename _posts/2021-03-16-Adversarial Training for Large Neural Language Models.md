@@ -53,10 +53,8 @@ D_distribution ~~ Attention Distribution(S(x)) + Attention Distribution(G(x'))
 
 이러한 문제를 해결하기 위해, 만약 |S(x)| = k, |G(x')| = k' 라고 가정하면, k' 길이의 시퀀스에 k개의 시퀀스를 alignment 시키면 어떨까, 컨텍스트 벡터를 다음과 같이 계산하고, C' = (W(S(x))+b)* (W'(G(x'))+b')^T
 
+![image](https://user-images.githubusercontent.com/33983084/111294835-132b1280-868e-11eb-8021-968864c1fbc5.png)
 
-$$
-D'_i = \frac{exp(C'_i)}{\sum _{j=1}^nexp(C'_j)}
-$$
 이렇게 되면, 우리는 G(x)에 대해서 S(x)가 어디에서 매핑될 수 있는지 계산할 수 있고, 새로운 distribution을 얻을 수 있다.
 
 그리고 새로운 출력을 아래와 같이 정의할 수 있다.
