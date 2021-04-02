@@ -28,39 +28,3 @@ microsoft research에서 발표한 논문, 간단하게 Adversarial Training을 
 만약 일상의 용어를 학습한 BERT를 Generalized 되었다고 가정하면, SciBert, BioBert 등의 모델들은 Specific domain에 적격한 모델이라고 볼 수 있다. 서로는 서로의 task를 잘 해결할 수 없음.
 
 이것은 등장하는 용어의 분산 차이라고 볼 수 있는데, 사실 specific domain terms를 제외한 general terms들은 중복되는 것이 많다.
-
-
-
-**key idea(내 아이디어...)**
-
-만약 Specific Domain BERT를 S(x)라고 가정하고, General BERT를 G(x')라고 가정할 때, x는 두 BERT의 토크나이저 차이로 각각 다른 입력이 들어가게 된다.
-
-S(x)는 해당 도메인에 관련된 토큰일수록 많은 정보량을 가지게되고, G(x')는 General한 도메인에서 어디에 속해있지 않은 토큰이 많은 정보량을 가진다고 추정할 수 있다.
-
-정확히 S(x)에서 각 토큰의 은닉층과 G(x')에서 각 토큰의 은닉층은 서로 다른 토큰을 가리킨다(확률적으로 같을 수도 있기는 하나 굉장히 낮은 확률일듯), 그러나 문서 레벨에서 각 은닉층을 살펴보면 정보량이 변화하는 분포를 볼 수 있다.
-
-두 LM에서 Attention Distribution의 합은 전체 문서에 대한 distribution으로 추정할 수 있다. 
-
-![image](https://user-images.githubusercontent.com/33983084/111295965-4fab3e00-868f-11eb-8a31-fc00990c3829.png)
-
-그러나 여기서 문제점은 다른 토크나이저로 부터 생성된 시퀀스의 길이가 다르다는 것이다. 그렇기 때문에 서로 같은 t 스텝에서 각 Distribution이 보고있는 토큰은 다르게 된다.
-
-![image](https://user-images.githubusercontent.com/33983084/111295693-04912b00-868f-11eb-9872-625d6474a946.png)
-
-이러한 문제를 해결하기 위해, 만약 
-
-![image](https://user-images.githubusercontent.com/33983084/111295245-816fd500-868e-11eb-89b2-a384d048da2f.png)
-
-라고 가정하면, 
-
-k' 길이의 시퀀스에 k개의 시퀀스를 alignment 시키면 어떨까, 컨텍스트 벡터를 다음과 같이 계산하고, 
-
-![image](https://user-images.githubusercontent.com/33983084/111295145-6735f700-868e-11eb-8a67-8696fa41616e.png)
-
-![image](https://user-images.githubusercontent.com/33983084/111294835-132b1280-868e-11eb-8021-968864c1fbc5.png)
-
-이렇게 되면, 우리는 G(x)에 대해서 S(x)가 어디에서 매핑될 수 있는지 계산할 수 있고, 새로운 distribution을 얻을 수 있다.
-
-그리고 새로운 출력을 아래와 같이 정의할 수 있다.
-
-![image](https://user-images.githubusercontent.com/33983084/111295288-8c2a6a00-868e-11eb-98da-ff2195e14d6f.png)
